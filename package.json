@@ -1,13 +1,13 @@
 {
-  "name": "enc-web",
+  "name": "sh-obfuscator",
   "version": "1.0.0",
-  "description": "Web front-end untuk enc/ungzexe style encryption",
-  "main": "index.js",
+  "type": "module",
   "scripts": {
-    "start": "node index.js"
+    "start": "node api/index.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "multer": "^1.4.5"
+    "seek-bzip": "2.0.0",
+    "express": "4.19.2",
+    "cors": "2.8.5"
   }
 }
