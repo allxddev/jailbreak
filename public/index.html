@@ -2,54 +2,56 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Enc Web</title>
+  <title>SH Obfuscator</title>
   <style>
-    body { font-family: Arial; padding:20px; }
-    .card { border:1px solid #ccc; padding:20px; border-radius:8px; max-width:600px; }
-    button { padding:8px 14px; margin-right:10px; }
+    body{font-family:system-ui,sans-serif;padding:20px;max-width:900px;margin:auto}
+    textarea{width:100%;height:240px;font-family:monospace;font-size:13px}
+    input,button{padding:8px 10px}
+    .row{display:flex;gap:8px;margin-top:8px}
   </style>
 </head>
 <body>
-  <div class="card">
-    <h2>Enc / Ungzexe Web</h2>
+  <h2>SH Obfuscator (for Vercel)</h2>
+  <p>Paste your .sh content below and click <b>Obfuscate</b>. Download obfuscated script and run locally.</p>
 
-    <input id="file" type="file"><br><br>
+  <label>Filename: <input id="fname" value="script.sh"></label>
+  <textarea id="src" placeholder="#!/bin/sh\n echo hello"></textarea>
 
-    <button onclick="enc()">Encrypt</button>
-    <button onclick="dec()">Decrypt</button>
-
-    <p id="status"></p>
+  <div class="row">
+    <button id="obf">Obfuscate</button>
+    <button id="deobf">Deobfuscate (from obf)</button>
+    <span id="status"></span>
   </div>
 
-  <script>
-    function send(url) {
-      const f = document.getElementById('file').files[0];
-      if (!f) return alert('Pilih file dulu');
+<script>
+async function postJSON(url, obj) {
+  const r = await fetch(url, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(obj) });
+  if (!r.ok) throw await r.text();
+  const blob = await r.blob();
+  const cd = r.headers.get('content-disposition') || '';
+  let filename = (cd.match(/filename=\"?([^\";]+)\"?/)||[])[1] || 'output.sh';
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+}
 
-      const fd = new FormData();
-      fd.append('file', f);
+document.getElementById('obf').onclick = async () => {
+  document.getElementById('status').textContent = 'Processing...';
+  try {
+    await postJSON('/api/obfuscate', { filename: document.getElementById('fname').value, content: document.getElementById('src').value });
+    document.getElementById('status').textContent = 'Done — file downloaded';
+  } catch (e) {
+    document.getElementById('status').textContent = 'Error: ' + e;
+  }
+};
 
-      document.getElementById('status').innerText = "Processing...";
-
-      fetch(url, { method: "POST", body: fd })
-      .then(r => {
-        if (!r.ok) return r.text().then(t => { throw t });
-        return r.blob();
-      })
-      .then(blob => {
-        const a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = f.name + (url==='/encrypt' ? '.enc.sh' : '.dec');
-        a.click();
-        document.getElementById('status').innerText = "Done!";
-      })
-      .catch(err => {
-        document.getElementById('status').innerText = "Error: " + err;
-      });
-    }
-
-    function enc() { send('/encrypt'); }
-    function dec() { send('/decrypt'); }
-  </script>
+document.getElementById('deobf').onclick = async () => {
+  document.getElementById('status').textContent = 'Processing...';
+  try {
+    await postJSON('/api/deobfuscate', { content: document.getElementById('src').value, filename: document.getElementById('fname').value });
+    document.getElementById('status').textContent = 'Done — file downloaded';
+  } catch (e) {
+    document.getElementById('status').textContent = 'Error: ' + e;
+  }
+};
+</script>
 </body>
 </html>
