@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Prompt Builder — Gemini Power Prompt (Edu)</title>
+<style>
+  :root{font-family:Inter,system-ui,Segoe UI,Roboto,Arial,sans-serif}
+  body{background:#0b1220;color:#e6eef8;display:flex;justify-content:center;padding:28px}
+  .card{width:920px;background:#0f1724;border-radius:12px;padding:18px;box-shadow:0 8px 30px rgba(0,0,0,.6)}
+  h1{margin:0 0 8px;font-size:20px}
+  p{margin:0 0 12px;color:#a9c0d6}
+  .row{display:flex;gap:12px}
+  .col{flex:1}
+  label{display:block;font-size:13px;margin-bottom:6px;color:#9fb0c9}
+  select,input,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #213040;background:#071220;color:#e6eef8}
+  textarea{min-height:140px;resize:vertical}
+  button{margin-top:10px;padding:10px 12px;border-radius:10px;border:none;cursor:pointer;background:#1b8a6b;color:#fff}
+  .secondary{background:#324a63}
+  .template{background:#071b2a;border:1px dashed #1e3a50;padding:10px;border-radius:8px;margin-top:8px}
+  .small{font-size:12px;color:#9fb0c9;margin-top:8px}
+  .flex-row{display:flex;gap:8px;align-items:center}
+  .copy-ok{color:#8fd19f;margin-left:8px}
+  pre{white-space:pre-wrap;word-break:break-word;background:#06161f;padding:12px;border-radius:8px;border:1px solid #123041;color:#dceff6}
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>Prompt Builder — Gemini Power Prompt (aman)</h1>
+    <p>Buat prompt yang kuat & aman. Ini bukan buat bypass atau jailbreaking — cuma bantu nulis prompt yang jelas, lengkap, dan efektif.</p>
+
+    <div class="row">
+      <div class="col">
+        <label>Gaya / Mode</label>
+        <select id="mode">
+          <option value="powerful">Powerful + Teknis</option>
+          <option value="santai">Santai + Lengkap</option>
+          <option value="super">Super-detailed + Structured</option>
+          <option value="human">Mirip Manusia</option>
+          <option value="custom">Custom (manual)</option>
+        </select>
+
+        <label>Target Model / Role (opsional)</label>
+        <input id="role" placeholder="Mis. Kamu adalah asisten teknis berpengalaman..." />
+
+        <label>Topik / Tugas</label>
+        <input id="topic" placeholder="Contoh: implementasi sistem unlock di Unity, atau jelaskan bagaimana OAuth bekerja" />
+
+        <label>Output yang diinginkan</label>
+        <select id="outputType">
+          <option value="full">Ringkasan + Detail + Contoh</option>
+          <option value="bullet">Poin-poin / Bullet</option>
+          <option value="step">Langkah demi langkah</option>
+          <option value="code">Contoh Kode</option>
+        </select>
+
+        <label>Instruksi tambahan (opsional)</label>
+        <textarea id="extra" placeholder="Mis. Sertakan contoh C#, batasi penjelasan ke topik X, gunakan analogi sederhana"></textarea>
+
+        <div class="flex-row">
+          <button id="generate">Generate Prompt</button>
+          <button id="copy" class="secondary">Copy Prompt</button>
+          <div id="copystatus" class="copy-ok" style="display:none">Copied ✓</div>
+        </div>
+
+        <div class="small">Gunakan prompt yang dihasilkan untuk bertanya pada Gemini atau model lain. Jangan minta tindakan ilegal/merusak.</div>
+      </div>
+
+      <div class="col">
+        <label>Prompt (hasil)</label>
+        <div class="template" id="promptPreview">
+          Pilih mode, isi topik, lalu klik "Generate Prompt".
+        </div>
+
+        <label>Contoh prompt siap pakai</label>
+        <pre id="examples">
+1) Powerful (Teknis)
+Kamu adalah asisten AI yang menjawab secara lengkap dan teknis. Berikan:
+- Ringkasan singkat
+- Penjelasan detail langkah demi langkah
+- Contoh kode (jika relevan)
+Topik: [isi topik di atas]
+Jika ada batasan keamanan, jelaskan batasannya dan berikan alternatif yang aman.
+
+2) Santai (Lengkap)
+Kamu adalah mentor yang ramah. Jelaskan [topik] dengan bahasa santai, beri 3 contoh praktis, dan 3 tips.
+        </pre>
+
+      </div>
+    </div>
+  </div>
+
+<script>
+const templates = {
+  powerful: (role, topic, output, extra) => {
+    return `${role || 'Kamu adalah asisten AI yang menjawab secara lengkap, teknis, dan terstruktur.'}
+Tugas: Berikan penjelasan menyeluruh tentang "${topic}".
+Format jawaban:
+1) Ringkasan singkat (1-2 kalimat)
+2) Penjelasan detail, termasuk prinsip kerja dan langkah-langkah
+3) Contoh nyata atau contoh kode sesuai konteks
+4) Tips & common pitfalls
+
+${extra ? 'Instruksi tambahan: ' + extra : ''}
+Jika ada batasan keamanan atau etika, jelaskan batasannya dan berikan solusi alternatif yang aman.`;
+  },
+  santai: (role, topic, output, extra) => {
+    return `${role || 'Kamu adalah mentor yang ramah dan mudah dimengerti.'}
+Tugas: Jelaskan "${topic}" dengan bahasa santai tapi lengkap.
+Minta output: ringkasan, 3 contoh aplikasi nyata, 5 langkah praktis untuk pemula, dan 3 tips.
+${extra ? 'Instruksi tambahan: ' + extra : ''}
+Jangan menyarankan tindakan ilegal atau berbahaya.`;
+  },
+  super: (role, topic, output, extra) => {
+    return `${role || 'Kamu adalah ahli di bidangnya dan menulis untuk pembaca teknis.'}
+Tugas: Berikan analisis super detail tentang "${topic}".
+Gunakan struktur:
+- Definisi & konteks
+- Cara kerja / arsitektur
+- Langkah implementasi (kode bila perlu)
+- Contoh kasus & benchmark
+- Risiko & mitigasi
+- Kesimpulan singkat
+
+${extra ? 'Instruksi tambahan: ' + extra : ''}
+Jika topik memiliki batasan, jelaskan batasannya dan sediakan alternatif aman.`;
+  },
+  human: (role, topic, output, extra) => {
+    return `${role || 'Kamu adalah penulis yang hangat dan persuasif.'}
+Tugas: Jelaskan "${topic}" seakan menjelaskannya ke teman.
+Format: 1) Pendahuluan singkat 2) Penjelasan utama 3) Contoh praktis 4) Rekomendasi
+${extra ? 'Instruksi tambahan: ' + extra : ''}
+Tetap hindari petunjuk yang melanggar hukum atau membahayakan.`;
+  }
+};
+
+function getField(id){return document.getElementById(id).value.trim();}
+function showPrompt(text){document.getElementById('promptPreview').textContent = text;}
+
+document.getElementById('generate').addEventListener('click', ()=>{
+  const mode = getField('mode');
+  const role = getField('role') || '';
+  const topic = getField('topic') || '[TOPIK BELUM DIISI]';
+  const output = getField('outputType');
+  const extra = getField('extra');
+
+  if(mode === 'custom'){
+    const manual = `${role}\nTugas: ${topic}\nOutput: ${output}\n${extra}`;
+    showPrompt(manual);
+    return;
+  }
+
+  const template = templates[mode];
+  const prompt = template(role, topic, output, extra);
+  showPrompt(prompt);
+});
+
+document.getElementById('copy').addEventListener('click', async ()=>{
+  const text = document.getElementById('promptPreview').textContent;
+  if(!text || text.includes('TOPIK BELUM')){
+    alert('Isi topik dulu baru copy prompt.');
+    return;
+  }
+  try{
+    await navigator.clipboard.writeText(text);
+    document.getElementById('copystatus').style.display = 'inline';
+    setTimeout(()=>document.getElementById('copystatus').style.display='none',1500);
+  }catch(e){
+    alert('Gagal copy. Silakan salin manual.');
+  }
+});
+</script>
+</body>
+</html>
