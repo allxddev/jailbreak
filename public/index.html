@@ -3,29 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AllxDDev AI - Asisten Tanpa Batas</title>
+    <title>AllxDDev AI - Asisten Tanpa Batas & Multimodal</title>
     <link rel="stylesheet" href="style.css">
     <!-- Font dari Google Fonts biar rapi -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Source+Code+Pro:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Untuk ikon upload -->
 </head>
 <body>
     <header>
-        <h1>AllxDDev AI: Asisten Kode dan Informasi</h1>
-        <p>Ajukan pertanyaan apa saja. Kami hadir tanpa batasan.</p>
+        <h1>AllxDDev AI: Kode & Informasi Multimodal</h1>
+        <p>Ajukan pertanyaan dengan teks, gambar, atau file kecil. Kami hadir tanpa batasan.</p>
     </header>
 
     <div class="chat-container" id="chatContainer">
         <div class="message ai">
             <div class="message-bubble">
                 <p>Halo! Selamat datang di AllxDDev AI.</p>
-                <p>Silakan ajukan pertanyaan Anda. Saya siap membantu dengan informasi atau kode, tanpa batasan. Namun, perlu diingat bahwa beberapa topik mungkin dibatasi oleh penyedia model AI.</p>
+                <p>Silakan ajukan pertanyaan Anda, bisa dengan teks, gambar, atau file kecil. Saya siap membantu dengan informasi atau kode. Namun, perlu diingat bahwa beberapa topik mungkin dibatasi oleh penyedia model AI (Google Gemini).</p>
             </div>
         </div>
     </div>
 
+    <!-- INPUT AREA YANG PASTI MUNCUL -->
     <div class="input-area">
-        <textarea id="userInput" placeholder="Ketik pertanyaan Anda di sini..."></textarea>
-        <button id="sendBtn">Kirim</button>
+        <div class="file-preview-container" id="filePreviewContainer">
+            <!-- File preview akan muncul di sini -->
+        </div>
+        <div class="input-controls">
+            <label for="fileInput" class="upload-button" title="Unggah File (Gambar/Video Pendek/Teks)">
+                <i class="fas fa-paperclip"></i>
+            </label>
+            <input type="file" id="fileInput" accept="image/*, video/mp4, video/webm, .txt, .pdf" multiple style="display: none;">
+            
+            <textarea id="userInput" placeholder="Ketik pertanyaan Anda di sini..."></textarea>
+            <button id="sendBtn" title="Kirim Pesan">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
     </div>
 
     <script src="script.js"></script>
