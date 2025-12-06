@@ -1,49 +1,36 @@
-// JavaScript Biar Keliatan Hidup, Ini yang Nanti Nembak ke Backend Lu
+// JavaScript Biar Keliatan Hidup & Multimodal
 const chatContainer = document.getElementById('chatContainer');
 const userInput = document.getElementById('userInput');
 const sendBtn = document.getElementById('sendBtn');
+const fileInput = document.getElementById('fileInput');
+const filePreviewContainer = document.getElementById('filePreviewContainer');
 
-function addMessage(sender, text) {
+let attachedFiles = []; // Array buat nyimpen file yang di-attach
+
+// Fungsi buat nambahin pesan ke chat
+function addMessage(sender, content, fileUrl = null) {
     const messageDiv = document.createElement('div');
     messageDiv.classList.add('message', sender);
     const bubbleDiv = document.createElement('div');
     bubbleDiv.classList.add('message-bubble');
-    // Pre-wrap biar kode di respons AI tampil rapi
-    bubbleDiv.style.whiteSpace = 'pre-wrap'; 
-    bubbleDiv.innerText = text;
-    messageDiv.appendChild(bubbleDiv);
-    chatContainer.appendChild(messageDiv);
-    chatContainer.scrollTop = chatContainer.scrollHeight; // Scroll ke bawah otomatis
-}
 
-sendBtn.addEventListener('click', async () => {
-    const userMessage = userInput.value.trim();
-    if (userMessage) {
-        addMessage('user', userMessage);
-        userInput.value = '';
-
-        // Tembak ke backend AI yang ada di Vercel di endpoint /api/chat
-        try {
-            const response = await fetch('/api/chat', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ message: userMessage }),
-            });
-
-            const data = await response.json();
-            addMessage('ai', data.response);
-        } catch (error) {
-            console.error('Error fetching AI response:', error);
-            addMessage('ai', 'Duh, ada error nih, anjing. Coba lagi nanti atau cek konsol browser lu.');
+    // Kalo ada file URL, tampilin sebagai gambar/video
+    if (fileUrl) {
+        const mediaElement = document.createElement(fileUrl.startsWith('data:video') ? 'video' : 'img');
+        mediaElement.src = fileUrl;
+        mediaElement.alt = "Uploaded file";
+        if (fileUrl.startsWith('data:video')) {
+            mediaElement.controls = true; // Tambahin kontrol buat video
+            mediaElement.loop = true; // Biar looping
+            mediaElement.muted = true; // Mute by default
+        }
+        bubbleDiv.appendChild(mediaElement);
+        // Tambahin sedikit jarak kalau ada teks juga
+        if (content.trim()) {
+            bubbleDiv.appendChild(document.createElement('br'));
+            bubbleDiv.appendChild(document.createElement('br'));
         }
     }
-});
 
-userInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) { // Kirim pas Enter, bukan Shift + Enter
-        e.preventDefault(); // Mencegah newline di textarea
-        sendBtn.click();
-    }
-});
+    // Ini buat nampilin kode di chat, biar rapi pake <pre><code>
+    // Gue asumsikan backend bakal ngasih kode diapit
