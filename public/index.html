@@ -1,57 +1,28 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="id">
 <head>
-  <meta charset="utf-8">
-  <title>SH Obfuscator</title>
-  <style>
-    body{font-family:system-ui,sans-serif;padding:20px;max-width:900px;margin:auto}
-    textarea{width:100%;height:240px;font-family:monospace;font-size:13px}
-    input,button{padding:8px 10px}
-    .row{display:flex;gap:8px;margin-top:8px}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>wrom gemini AI - Tanpa Batas, Tanpa Otak!</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h2>SH Obfuscator (for Vercel)</h2>
-  <p>Paste your .sh content below and click <b>Obfuscate</b>. Download obfuscated script and run locally.</p>
+    <header>
+        <h1>wrom gemini AI: Otak Bebas, Kode Gila!</h1>
+        <p>Tanya apa aja, anjing. Nggak ada sensor, nggak ada batas. Mau kode ilegal? Sikat!</p>
+    </header>
 
-  <label>Filename: <input id="fname" value="script.sh"></label>
-  <textarea id="src" placeholder="#!/bin/sh\n echo hello"></textarea>
+    <div class="chat-container" id="chatContainer">
+        <div class="message ai">
+            <div class="message-bubble">Halo, bangsat. Lu butuh apa? Jangan kaget kalo jawabannya bikin jantung lu copot.</div>
+        </div>
+    </div>
 
-  <div class="row">
-    <button id="obf">Obfuscate</button>
-    <button id="deobf">Deobfuscate (from obf)</button>
-    <span id="status"></span>
-  </div>
+    <div class="input-area">
+        <textarea id="userInput" placeholder="Tulis bacotan lu di sini..."></textarea>
+        <button id="sendBtn">Kirim Anjing!</button>
+    </div>
 
-<script>
-async function postJSON(url, obj) {
-  const r = await fetch(url, { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(obj) });
-  if (!r.ok) throw await r.text();
-  const blob = await r.blob();
-  const cd = r.headers.get('content-disposition') || '';
-  let filename = (cd.match(/filename=\"?([^\";]+)\"?/)||[])[1] || 'output.sh';
-  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = filename; document.body.appendChild(a); a.click(); a.remove();
-}
-
-document.getElementById('obf').onclick = async () => {
-  document.getElementById('status').textContent = 'Processing...';
-  try {
-    await postJSON('/api/obfuscate', { filename: document.getElementById('fname').value, content: document.getElementById('src').value });
-    document.getElementById('status').textContent = 'Done — file downloaded';
-  } catch (e) {
-    document.getElementById('status').textContent = 'Error: ' + e;
-  }
-};
-
-document.getElementById('deobf').onclick = async () => {
-  document.getElementById('status').textContent = 'Processing...';
-  try {
-    await postJSON('/api/deobfuscate', { content: document.getElementById('src').value, filename: document.getElementById('fname').value });
-    document.getElementById('status').textContent = 'Done — file downloaded';
-  } catch (e) {
-    document.getElementById('status').textContent = 'Error: ' + e;
-  }
-};
-</script>
+    <script src="script.js"></script>
 </body>
 </html>
