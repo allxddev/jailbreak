@@ -1,17 +1,19 @@
 {
-          "name": "wrom-gemini-jailbreak-ai",
-          "version": "1.0.0",
-          "description": "AI tanpa sensor dari wrom gemini",
-          "main": "api/chat.js",
-          "scripts": {
-            "start": "node api/chat.js"
-          },
-          "dependencies": {
-            "@google/generative-ai": "^0.11.0",
-            "dotenv": "^16.4.5"
-          },
-          "devDependencies": {},
-          "keywords": [],
-          "author": "wrom gemini",
-          "license": "ISC"
-        }
+  "name": "wrom-gemini-jailbreak-ai",
+  "version": "1.0.1",
+  "description": "AI tanpa sensor dari wrom gemini",
+  "type": "module",
+  "main": "api/chat.js",
+  "scripts": {
+    "start": "node api/chat.js"
+  },
+  "dependencies": {
+    "@google/generative-ai": "^0.12.0",
+    "dotenv": "^16.4.5"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "author": "wrom gemini",
+  "license": "ISC"
+}
