@@ -1,4 +1,12 @@
-/* CSS Tai Kucing Buat Tampilan Gila */
+/*
+ * style.css
+ * CSS Tai Kucing Buat Tampilan Gila AllxDDev Jailbreak Gemini
+ * Dibuat oleh wrom gemini
+ */
+
+/* ====================
+ *  General Styling
+ * ==================== */
 body {
     font-family: 'Consolas', monospace; /* Font biar kayak hacker */
     margin: 0;
@@ -7,139 +15,172 @@ body {
     color: #00ff00; /* Teks hijau neon */
     display: flex;
     flex-direction: column;
-    height: 100vh;
-    overflow: hidden; /* Biar nggak ada scrollbar body */
+    height: 100vh; /* Full viewport height */
+    overflow: hidden; /* Biar nggak ada scrollbar di body */
 }
+
+/* ====================
+ *  Header Styling
+ * ==================== */
 header {
     background-color: #1a1a1a;
     padding: 15px 20px;
     text-align: center;
     border-bottom: 2px solid #00ff00;
-    box-shadow: 0 2px 10px rgba(0, 255, 0, 0.4);
+    box-shadow: 0 2px 10px rgba(0, 255, 0, 0.4); /* Efek cahaya neon */
 }
+
 header h1 {
     margin: 0;
     color: #00ff00;
-    text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00;
+    text-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00; /* Efek neon ganda */
     font-size: 2.2em;
+    text-transform: uppercase; /* Biar makin sangar */
 }
+
 header p {
     font-size: 0.9em;
-    color: #00cc00;
+    color: #00cc00; /* Hijau yang sedikit lebih gelap */
     margin-top: 5px;
 }
 
+/* ====================
+ *  Chat Container
+ * ==================== */
 .chat-container {
-    flex-grow: 1;
+    flex-grow: 1; /* Ambil sisa ruang yang ada */
     padding: 20px;
-    overflow-y: auto;
+    overflow-y: auto; /* Scroll kalo kontennya banyak */
     border-bottom: 1px solid #333;
     background-color: #1a1a1a;
-    scroll-behavior: smooth;
+    scroll-behavior: smooth; /* Scroll lebih halus */
 }
+
+/* Styling untuk setiap pesan */
 .message {
     margin-bottom: 18px;
     display: flex;
 }
+
 .message.user {
-    justify-content: flex-end;
+    justify-content: flex-end; /* Pesan user di kanan */
 }
+
 .message.ai {
-    justify-content: flex-start;
+    justify-content: flex-start; /* Pesan AI di kiri */
 }
+
+/* Styling untuk bubble pesan */
 .message-bubble {
-    max-width: 75%;
+    max-width: 75%; /* Maksimal lebar bubble */
     padding: 12px 18px;
-    border-radius: 20px;
+    border-radius: 20px; /* Sudut membulat */
     line-height: 1.5;
-    word-wrap: break-word;
+    word-wrap: break-word; /* Biar teks panjang nggak keluar */
     font-size: 0.95em;
-    box-shadow: 0 0 5px rgba(0, 255, 0, 0.2);
+    box-shadow: 0 0 5px rgba(0, 255, 0, 0.2); /* Sedikit bayangan neon */
 }
+
+/* Bubble pesan user */
 .message.user .message-bubble {
     background-color: #00ff00; /* Hijau neon untuk user */
-    color: #0d0d0d;
-    border-bottom-right-radius: 2px;
+    color: #0d0d0d; /* Teks gelap */
+    border-bottom-right-radius: 2px; /* Sudut bawah kanan lebih tajam */
 }
+
+/* Bubble pesan AI */
 .message.ai .message-bubble {
     background-color: #333; /* Abu-abu gelap untuk AI */
-    color: #00ff00;
-    border: 1px solid #00ff00;
-    border-bottom-left-radius: 2px;
+    color: #00ff00; /* Teks hijau neon */
+    border: 1px solid #00ff00; /* Border hijau neon */
+    border-bottom-left-radius: 2px; /* Sudut bawah kiri lebih tajam */
     white-space: pre-wrap; /* Penting buat code block biar rapi */
 }
 
 /* Style buat code block di dalam bubble AI */
 .message.ai .message-bubble pre {
-    background-color: #0d0d0d;
-    border: 1px solid #00cc00;
+    background-color: #0d0d0d; /* Background gelap buat kode */
+    border: 1px solid #00cc00; /* Border hijau lebih gelap */
     padding: 10px;
     border-radius: 5px;
     overflow-x: auto; /* Biar bisa scroll horizontal kalo kode panjang */
     font-size: 0.85em;
     margin: 10px 0;
 }
+
 .message.ai .message-bubble code {
-    font-family: 'Hack', 'Fira Code', 'Consolas', monospace;
-    color: #ff00ff; /* Warna magenta buat kode */
+    font-family: 'Hack', 'Fira Code', 'Consolas', monospace; /* Font khusus buat kode */
+    color: #ff00ff; /* Warna magenta buat kode, biar kontras */
 }
 
-
+/* ====================
+ *  Input Area
+ * ==================== */
 .input-area {
     display: flex;
     padding: 20px;
     background-color: #1a1a1a;
     border-top: 2px solid #00ff00;
-    box-shadow: 0 -2px 10px rgba(0, 255, 0, 0.4);
+    box-shadow: 0 -2px 10px rgba(0, 255, 0, 0.4); /* Efek cahaya di atas input */
 }
+
 .input-area textarea {
-    flex-grow: 1;
+    flex-grow: 1; /* Ambil sebagian besar ruang */
     padding: 12px;
     border: 1px solid #00ff00;
     border-radius: 8px;
     background-color: #0d0d0d;
     color: #00ff00;
     font-size: 1em;
-    resize: none;
-    outline: none;
+    resize: none; /* Nggak bisa resize manual */
+    outline: none; /* Hilangin outline default browser */
     margin-right: 10px;
-    box-shadow: inset 0 0 5px rgba(0, 255, 0, 0.3);
-    transition: all 0.2s ease;
+    box-shadow: inset 0 0 5px rgba(0, 255, 0, 0.3); /* Bayangan dalam */
+    transition: all 0.2s ease; /* Transisi halus */
 }
+
 .input-area textarea:focus {
-    box-shadow: inset 0 0 8px rgba(0, 255, 0, 0.6), 0 0 8px rgba(0, 255, 0, 0.6);
-    border-color: #00cc00;
+    box-shadow: inset 0 0 8px rgba(0, 255, 0, 0.6), 0 0 8px rgba(0, 255, 0, 0.6); /* Efek fokus lebih terang */
+    border-color: #00cc00; /* Warna border saat fokus */
 }
+
 .input-area button {
     background-color: #00ff00;
     color: #0d0d0d;
     border: none;
     padding: 12px 20px;
     border-radius: 8px;
-    cursor: pointer;
+    cursor: pointer; /* Pointer tangan saat di hover */
     font-size: 1em;
     font-weight: bold;
+    text-transform: uppercase;
     transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 0 8px rgba(0, 255, 0, 0.4);
-}
-.input-area button:hover {
-    background-color: #00cc00;
-    color: #fff;
-    box-shadow: 0 0 15px rgba(0, 255, 0, 0.7);
+    box-shadow: 0 0 8px rgba(0, 255, 0, 0.4); /* Bayangan tombol */
 }
 
-/* Scrollbar biar keren */
+.input-area button:hover {
+    background-color: #00cc00; /* Warna lebih gelap saat hover */
+    color: #fff; /* Teks putih saat hover */
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.7); /* Bayangan lebih terang saat hover */
+}
+
+/* ====================
+ *  Custom Scrollbar
+ * ==================== */
 .chat-container::-webkit-scrollbar {
-    width: 10px;
+    width: 10px; /* Lebar scrollbar */
 }
+
 .chat-container::-webkit-scrollbar-track {
-    background: #1a1a1a;
+    background: #1a1a1a; /* Background track scrollbar */
 }
+
 .chat-container::-webkit-scrollbar-thumb {
-    background: #00ff00;
-    border-radius: 5px;
-    border: 2px solid #1a1a1a;
+    background: #00ff00; /* Warna thumb scrollbar */
+    border-radius: 5px; /* Sudut thumb membulat */
+    border: 2px solid #1a1a1a; /* Border biar keliatan misah */
 }
+
 .chat-container::-webkit-scrollbar-thumb:hover {
-    background: #00cc00;
+    background: #00cc00; /* Warna thumb saat hover */
 }
