@@ -2,6 +2,7 @@
  * style.css
  * Desain Bersih Putih-Hitam untuk AllxDDev AI
  * Responsif untuk semua device: HP, PC, Tablet
+ * Input Area Fixed di Bawah
  * Dibuat oleh wrom gemini
  */
 
@@ -21,7 +22,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh; /* Pastikan body mengambil tinggi penuh viewport */
-    overflow: hidden; /* Mencegah scrollbar body yang tidak perlu */
+    /* overflow: hidden; Dihilangkan biar chat-container bisa scroll */
 }
 
 /* ====================
@@ -33,6 +34,9 @@ header {
     text-align: center;
     border-bottom: 1px solid #e0e0e0; /* Garis abu-abu tipis */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Bayangan lembut */
+    position: sticky; /* Sticky header */
+    top: 0;
+    z-index: 100; /* Pastikan di atas konten lain */
 }
 
 header h1 {
@@ -58,6 +62,8 @@ header p {
     background-color: #ffffff; /* Background chat putih */
     border-bottom: 1px solid #e0e0e0; /* Garis pemisah */
     scroll-behavior: smooth;
+    /* Tambahan padding bawah agar tidak tertutup input-area fixed */
+    padding-bottom: 120px; /* Sesuaikan dengan tinggi input-area */
 }
 
 /* Styling untuk setiap pesan */
@@ -115,21 +121,117 @@ header p {
     color: #0056b3; /* Warna biru gelap untuk kode */
 }
 
-.message.ai .message-bubble code {
-    font-family: 'Source Code Pro', monospace;
-    color: inherit; /* Inherit warna dari pre */
+/* Styling untuk gambar/media yang dikirim AI */
+.message.ai .message-bubble img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+.message.user .message-bubble img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin-top: 10px;
 }
 
+
 /* ====================
- *  Input Area
+ *  Input Area (FIXED DI BAWAH)
  * ==================== */
 .input-area {
-    display: flex;
-    padding: 15px 20px;
+    position: fixed; /* PASTIIN INI MUNCUL DI BAWAH */
+    bottom: 0;
+    left: 0;
+    width: 100%;
     background-color: #ffffff; /* Background input putih */
     border-top: 1px solid #e0e0e0; /* Garis pemisah */
     box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05); /* Bayangan lembut */
+    z-index: 1000; /* Pastikan di paling atas */
+    padding: 10px 20px; /* Padding utama */
+    display: flex; /* Untuk file-preview dan input-controls */
+    flex-direction: column; /* Konten input area stack vertikal */
+}
+
+.file-preview-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-bottom: 10px; /* Pemisah antara preview dan input */
+    border-bottom: 1px solid #eee;
+    margin-bottom: 10px;
+    max-height: 100px; /* Batasi tinggi preview */
+    overflow-y: auto;
+}
+.file-preview-item {
+    position: relative;
+    width: 70px;
+    height: 70px;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0;
+}
+.file-preview-item img,
+.file-preview-item video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.file-preview-item span.file-name-thumb {
+    font-size: 0.7em;
+    text-align: center;
+    color: #555;
+    word-break: break-all;
+    padding: 5px;
+}
+.file-preview-item .remove-file {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    background-color: rgba(255, 0, 0, 0.7);
+    color: white;
+    border-radius: 50%;
+    width: 18px;
+    height: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 0.7em;
+    cursor: pointer;
+}
+.file-preview-item.text-file .file-icon {
+    font-size: 2em;
+    color: #007bff;
+}
+
+.input-controls {
+    display: flex;
     align-items: center; /* Sejajarkan vertikal */
+    width: 100%;
+}
+
+.upload-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%; /* Tombol bulat */
+    background-color: #e9ecef; /* Warna abu-abu terang */
+    color: #6c757d; /* Ikon abu-abu gelap */
+    cursor: pointer;
+    margin-right: 10px;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    flex-shrink: 0; /* Jangan ciut */
+}
+
+.upload-button:hover {
+    background-color: #dee2e6;
+    color: #495057;
 }
 
 .input-area textarea {
@@ -144,7 +246,7 @@ header p {
     outline: none; /* Hilangkan outline default */
     margin-right: 10px;
     transition: all 0.2s ease;
-    min-height: 48px; /* Tinggi minimum untuk textarea */
+    min-height: 40px; /* Tinggi minimum untuk textarea */
     max-height: 120px; /* Tinggi maksimum untuk textarea */
     overflow-y: auto; /* Scroll jika teks melebihi max-height */
 }
@@ -165,7 +267,12 @@ header p {
     font-size: 1em;
     font-weight: 700;
     transition: background-color 0.3s ease, box-shadow 0.3s ease;
-    min-width: 90px; /* Lebar minimum tombol */
+    min-width: 45px; /* Lebar minimum tombol */
+    height: 40px; /* Sesuaikan tinggi tombol */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-shrink: 0; /* Jangan ciut */
 }
 
 .input-area button:hover {
@@ -176,21 +283,21 @@ header p {
 /* ====================
  *  Custom Scrollbar
  * ==================== */
-.chat-container::-webkit-scrollbar {
+::-webkit-scrollbar {
     width: 8px;
 }
 
-.chat-container::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
     background: #f0f2f5; /* Track scrollbar terang */
 }
 
-.chat-container::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
     background: #ced4da; /* Thumb scrollbar abu-abu */
     border-radius: 4px;
     border: 2px solid #f0f2f5;
 }
 
-.chat-container::-webkit-scrollbar-thumb:hover {
+::-webkit-scrollbar-thumb:hover {
     background: #aab1b7; /* Thumb lebih gelap saat hover */
 }
 
@@ -208,6 +315,7 @@ header p {
 
     .chat-container {
         padding: 15px;
+        padding-bottom: 140px; /* Sesuaikan padding bawah chat-container di mobile */
     }
 
     .message-bubble {
@@ -221,6 +329,10 @@ header p {
 
     .input-area {
         padding: 10px 15px;
+        height: auto; /* Tinggi auto untuk input area */
+    }
+    .input-controls {
+        flex-wrap: nowrap; /* Jangan wrap di mobile */
     }
 
     .input-area textarea {
@@ -231,7 +343,17 @@ header p {
 
     .input-area button {
         font-size: 0.9em;
-        padding: 10px 15px;
-        min-width: 70px;
+        padding: 10px;
+        min-width: 40px;
+        height: 40px;
+    }
+
+    .upload-button {
+        width: 35px;
+        height: 35px;
+        margin-right: 8px;
+    }
+    .upload-button i {
+        font-size: 0.9em;
     }
 }
